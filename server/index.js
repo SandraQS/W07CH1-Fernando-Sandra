@@ -2,6 +2,10 @@ const morgan = require("morgan");
 const debug = require("debug")("series:server");
 const express = require("express");
 const chalk = require("chalk");
+const {
+  notFoundErrorHandler,
+  generalErrorHandler,
+} = require("./middlewares/error");
 
 const app = express();
 
@@ -27,5 +31,8 @@ const initializerServer = (port) =>
 
 app.use(morgan("dev"));
 app.use(express.json());
+
+app.use(notFoundErrorHandler);
+app.use(generalErrorHandler);
 
 module.exports = { initializerServer };
