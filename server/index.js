@@ -3,6 +3,7 @@ const morgan = require("morgan");
 const debug = require("debug")("series:server");
 const express = require("express");
 const chalk = require("chalk");
+const cors = require("cors");
 
 const {
   notFoundErrorHandler,
@@ -39,10 +40,11 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
+app.use("/users", usersRoutes);
+app.use("/series", seriesRoutes);
+
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
 
-app.use("/users", usersRoutes);
-app.use("/series", seriesRoutes);
 
 module.exports = { initializerServer };
