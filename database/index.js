@@ -4,6 +4,15 @@ const debug = require("debug")("series:database");
 
 const initDB = (conectionDBString) =>
   new Promise((resolve, reject) => {
+    mongoose.set("toJSON", {
+      virtuals: true,
+      transform: (doc, ret) => {
+        // eslint-disable-next-line no-underscore-dangle
+        delete ret._id;
+        // eslint-disable-next-line no-underscore-dangle
+        delete ret.__v;
+      },
+    });
     mongoose.connect(conectionDBString, (error) => {
       if (error) {
         debug(chalk.red("No se ha podido conectar con la base de datos"));
