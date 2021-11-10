@@ -2,6 +2,7 @@ const morgan = require("morgan");
 const debug = require("debug")("series:server");
 const express = require("express");
 const chalk = require("chalk");
+const cors = require("cors");
 
 const app = express();
 
@@ -26,6 +27,7 @@ const initializerServer = (port) =>
   });
 
 app.use(morgan("dev"));
+app.use(cors());
 app.use(express.json());
 
 module.exports = { initializerServer };
