@@ -1,3 +1,4 @@
+const cors = require("cors");
 const morgan = require("morgan");
 const debug = require("debug")("series:server");
 const express = require("express");
@@ -8,14 +9,9 @@ const {
   generalErrorHandler,
 } = require("./middlewares/error");
 
-const cors = require("cors");
 const usersRoutes = require("./routes/usersRoutes");
 
-
-
 const seriesRoutes = require("./routes/seriesRoutes");
-
-
 
 const app = express();
 
@@ -43,14 +39,10 @@ app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
 
-
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
 
 app.use("/users", usersRoutes);
-
 app.use("/series", seriesRoutes);
-
-
 
 module.exports = { initializerServer };
