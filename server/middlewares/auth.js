@@ -1,5 +1,5 @@
 const chalk = require("chalk");
-const debug = require("debug")("file:middlewares:user");
+const debug = require("debug")("series:auth");
 const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
@@ -18,7 +18,7 @@ const auth = (req, res, next) => {
       next(error);
     } else {
       try {
-        const user = jwt.verify(token, process.env.SECRET);
+        const user = jwt.verify(token, process.env.SECRET_TOKEN);
         req.userId = user.id;
         next();
       } catch (error) {
