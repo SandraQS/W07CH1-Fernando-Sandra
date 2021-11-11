@@ -60,6 +60,7 @@ describe("Given a getSeriesViewed function", () => {
       expect(res.json).toHaveBeenCalledWith(seriesList);
     });
   });
+
   describe("And Serie.find reject", () => {
     test("Then it should invoke next function with error rejected", () => {
       const error = {};
@@ -70,4 +71,5 @@ describe("Given a getSeriesViewed function", () => {
       expect(next).toHaveBeenCalledWith(error)
     });
   });
+
 });
