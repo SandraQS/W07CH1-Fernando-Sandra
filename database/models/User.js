@@ -19,10 +19,9 @@ const userSchema = new Schema({
   admin: {
     type: Boolean,
     required: true,
-    default: false,
   },
 
-  viewedSeries: {
+  series: {
     type: [Types.ObjectId],
     ref: "Serie",
   },
