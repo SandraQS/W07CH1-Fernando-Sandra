@@ -85,9 +85,16 @@ describe("Given loginUser function", () => {
     });
   });
 
-  describe("When receives an req object with a correct username and a password unexist", () => {
+  describe("When receives an req object with a correct username and a password incorrect", () => {
     test("Then it should called the next function with error, error.message 'Algo ha fallado' and error.code 401", async () => {
-      User.findOne = jest.fn().mockResolvedValue(null);
+      User.findOne = jest.fn().mockResolvedValue({
+        body: {
+          id: "618c2ad341f016c64bcee2d3",
+          username: "Fernando",
+          password: "1234",
+        },
+      });
+
       bcrypt.compare = jest.fn().mockResolvedValue(false);
       const req = {
         body: {
