@@ -60,4 +60,16 @@ describe("Given a getSeriesViewed function", () => {
       expect(res.json).toHaveBeenCalledWith(seriesList);
     });
   });
+
+  describe("And Serie.find reject", () => {
+    test("Then it should invoke next function with error rejected", () => {
+      const error = {};
+      Serie.find = jest.fn().mockRejectedValue(error);
+
+      await getSeriesViewed(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error)
+    });
+  });
+
 });
