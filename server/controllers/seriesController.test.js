@@ -62,11 +62,13 @@ describe("Given a getSeriesViewed function", () => {
   });
 
   describe("And Serie.find reject", () => {
-    test("Then it should invoke next function with error rejected", () => {
+    test("Then it should invoke next function with error rejected", async () => {
       const error = {};
       Serie.find = jest.fn().mockRejectedValue(error);
+      const res = {};
+      const next = jest.fn();
 
-      await getSeriesViewed(req, res, next);
+      await getSeriesViewed(null, res, next);
 
       expect(next).toHaveBeenCalledWith(error);
     });
