@@ -3,6 +3,7 @@ const User = require("../../database/models/User");
 const { createUser, loginUser } = require("./usersControllers");
 
 jest.mock("../../database/models/User");
+jest.mock("bcrypt");
 
 describe("Given createUser function", () => {
   describe("When receives an req object with a new user and res objet", () => {
@@ -20,7 +21,8 @@ describe("Given createUser function", () => {
         body: {
           name: "Fernando",
           username: "FMC",
-          password: await bcrypt.hash(req.body.password, 10),
+          password:
+            "$2b$10$zT/nsDjrM8cj57I1O0gteOcJk9xWj6azdXyknC4SUjP.Q1dyMxz66",
           admin: true,
         },
       };
@@ -64,7 +66,7 @@ describe("Given createUser function", () => {
 
 describe("Given loginUser function", () => {
   describe("When receives an req object with an username unexist, and a next function", () => {
-    test("Then it should called the next function with error", async () => {
+    test("Then it should called the next function with error, error.message 'Algo ha fallado' and error.code 401", async () => {
       const req = {
         body: {
           username: "Fernando",
@@ -74,6 +76,25 @@ describe("Given loginUser function", () => {
 
       User.findOne = jest.fn().mockResolvedValue(null);
 
+      const error = new Error("Algo ha fallado");
+      const next = jest.fn();
+
+      await loginUser(req, null, next);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", 401);
+    });
+  });
+
+  describe("When receives an req object with a correct username and a password unexist", () => {
+    test("Then it should called the next function with error, error.message 'Algo ha fallado' and error.code 401", async () => {
+      User.findOne = jest.fn().mockResolvedValue(null);
+      bcrypt.compare = jest.fn().mockResolvedValue(false);
+      const req = {
+        body: {
+          username: "Fernando",
+          password: "1234",
+        },
+      };
       const error = new Error("Algo ha fallado");
       const next = jest.fn();
 
