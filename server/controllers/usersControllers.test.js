@@ -113,7 +113,7 @@ describe("Given loginUser function", () => {
     });
   });
 
-  describe("When receives an req object with a correct username and a correct password ", () => {
+  describe("When receives an req object with a correct username and a correct password", () => {
     test("Then it should called jwt.sing with a new token and called res.json with this token", async () => {
       User.findOne = jest.fn().mockResolvedValue({
         body: {
@@ -146,4 +146,27 @@ describe("Given loginUser function", () => {
       expect(res.json).toHaveBeenCalledWith(response);
     });
   });
+
+  describe("When it receives a function next and rejected error", () => {
+    test("Then it should called next function with the error object, error.message 'No autorizado' and error.code is 401", async () => {
+      const next = jest.fn();
+      User.findOne = jest.fn().mockRejectedValue(null);
+      const error = new Error("No autorizado");
+      const req = {
+        body: {},
+      };
+
+      await loginUser(req, null, next);
+
+      expect(next).toHaveBeenCalledWith(error);
+      expect(next.mock.calls[0][0]).toHaveProperty("message", error.message);
+      expect(next.mock.calls[0][0]).toHaveProperty("code", 401);
+    });
+  });
+
+  /*  
+    const error = new Error("No autorizado");
+    error.code = 401;
+    next(error);
+     */
 });
