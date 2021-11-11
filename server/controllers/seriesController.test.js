@@ -1,9 +1,7 @@
-const { describe } = require("jest-circus");
-const { test } = require("media-typer");
-const Serie = require("../../database/models/series");
+const Serie = require("../../database/models/Serie");
 const { getSeries, getSeriesViewed } = require("./seriesControllers");
 
-jest.mock("../../database/models/series");
+jest.mock("../../database/models/Serie");
 
 describe("Given a getSeries function", () => {
   describe("When it receives an object res", () => {
@@ -66,7 +64,10 @@ describe("Given a getSeriesViewed function", () => {
     test("Then it should invoke next function with error rejected", () => {
       const error = {};
       Serie.find = jest.fn().mockRejectedValue(error);
+
       await getSeriesViewed(req, res, next);
+
+      expect(next).toHaveBeenCalledWith(error)
     });
   });
 });
