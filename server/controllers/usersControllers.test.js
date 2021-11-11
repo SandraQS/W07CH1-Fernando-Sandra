@@ -30,9 +30,14 @@ describe("Given createUser function", () => {
       };
 
       User.create = jest.fn().mockResolvedValue(newUser);
-      const res = {
-        json: jest.fn(),
+
+      const mockResponse = () => {
+        const res = {};
+        res.status = jest.fn().mockReturnValue(res);
+        res.json = jest.fn().mockReturnValue(res);
+        return res;
       };
+      const res = mockResponse();
 
       await createUser(req, res);
 

@@ -5,14 +5,14 @@ const User = require("../../database/models/User");
 
 const createUser = async (req, res, next) => {
   try {
-    const { name, username, password, admin } = req.body;
+    const { name, username, password } = req.body;
     const newUser = await User.create({
       name,
       username,
       password: await bcrypt.hash(password, 10),
-      admin,
     });
-    res.json(newUser);
+
+    res.status(201).json(newUser);
   } catch (error) {
     error.code = 400;
     error.message = "Formato no válido";
