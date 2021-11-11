@@ -38,8 +38,8 @@ beforeEach(async () => {
   );
 });
 
-describe("Given /registe route", () => {
-  describe("When it receives a POST request", () => {
+describe("Given the users routes", () => {
+  describe("When it receives a POST request with the /register route", () => {
     test("Then it should send a response with a new user", async () => {
       const { body } = await request
         .post("/users/register")
@@ -53,6 +53,19 @@ describe("Given /registe route", () => {
       expect(body).toHaveProperty("name", "Gisela");
       expect(body).toHaveProperty("username", "GQS");
       expect(body).toHaveProperty("password");
+    });
+  });
+
+  describe("When it receives a POST request with the /login route", () => {
+    test("Then it should send a response with token", async () => {
+      const { body } = await request
+        .post("/users/login")
+        .send({
+          username: "FMC",
+          password: "1234",
+        })
+        .expect(200);
+      expect(body).toHaveProperty("token", body.token);
     });
   });
 });
