@@ -1,3 +1,4 @@
+const cors = require("cors");
 const morgan = require("morgan");
 const debug = require("debug")("series:server");
 const express = require("express");
@@ -38,9 +39,12 @@ const initializerServer = (port) =>
 app.use(morgan("dev"));
 app.use(cors());
 app.use(express.json());
+
 app.use("/users", usersRoutes);
 app.use("/series", seriesRoutes);
+
 app.use(notFoundErrorHandler);
 app.use(generalErrorHandler);
+
 
 module.exports = { initializerServer };
