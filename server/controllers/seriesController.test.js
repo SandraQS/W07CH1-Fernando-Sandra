@@ -1,5 +1,7 @@
+const { describe } = require("jest-circus");
+const { test } = require("media-typer");
 const Serie = require("../../database/models/series");
-const { getSeries } = require("./seriesControllers");
+const { getSeries, getSeriesViewed } = require("./seriesControllers");
 
 jest.mock("../../database/models/series");
 
@@ -25,6 +27,46 @@ describe("Given a getSeries function", () => {
 
       expect(Serie.find).toHaveBeenCalled();
       expect(res.json).toHaveBeenCalledWith(series);
+    });
+  });
+});
+
+describe("Given a getSeriesViewed function", () => {
+  describe("When it receives a series list with a property viewed true and a res object", () => {
+    test("Then it should invoke Serie.find with series viewed", async () => {
+      const seriesList = [
+        {
+          id: 1,
+          name: "Fredy",
+          year: 2002,
+          categorie: "Action",
+          platform: "Filmin",
+          viewed: true,
+        },
+        {
+          id: 2,
+          name: "Isidoro",
+          year: 1980,
+          categorie: "Animation",
+          platform: "Cinetix",
+          viewed: true,
+        },
+      ];
+      const res = {
+        json: jest.fn(),
+      };
+      Serie.find = jest.fn().mockResolvedValue(seriesList);
+
+      await getSeriesViewed(null, res);
+
+      expect(res.json).toHaveBeenCalledWith(seriesList);
+    });
+  });
+  describe("And Serie.find reject", () => {
+    test("Then it should invoke next function with error rejected", () => {
+      const error = {};
+      Serie.find = jest.fn().mockRejectedValue(error);
+      await getSeriesViewed(req, res, next);
     });
   });
 });
