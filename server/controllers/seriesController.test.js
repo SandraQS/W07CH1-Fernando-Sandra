@@ -68,8 +68,7 @@ describe("Given a getSeriesViewed function", () => {
 
       await getSeriesViewed(req, res, next);
 
-      expect(next).toHaveBeenCalledWith(error)
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
-
 });

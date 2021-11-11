@@ -10,7 +10,7 @@ const auth = (req, res, next) => {
     error.code = 401;
     next(error);
   } else {
-    const token = authHeader.split("")[1];
+    const token = authHeader.split(" ")[1];
     if (!token) {
       debug(chalk.red("No hay token"));
       const error = new Error("No hay token");
@@ -21,8 +21,8 @@ const auth = (req, res, next) => {
         const user = jwt.verify(token, process.env.SECRET_TOKEN);
         req.userId = user.id;
         next();
-      } catch (error) {
-        error.message("El token no sirve");
+      } catch {
+        const error = new Error("El token no sirve");
         error.code = 401;
         next(error);
       }
